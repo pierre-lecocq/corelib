@@ -1,0 +1,18 @@
+AllCops:
+  Exclude:
+    - '**/Rakefile'
+    - '**/Gemfile'
+    - 'examples/*'
+
+Metrics/LineLength:
+  Max: 100
+  Exclude:
+    - 'test/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/*'
+
+Style/NilComparison:
+  Exclude:
+    - 'test/*'

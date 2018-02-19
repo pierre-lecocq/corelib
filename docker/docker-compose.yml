@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+
+  corelib-ruby:
+    container_name: 'corelib-ruby'
+    build:
+      context: ./ruby
+    environment:
+      - DB_HOST
+      - DB_USER
+      - DB_PASSWORD
+      - DB_DBNAME
+      - CACHE_HOST
+      - CACHE_PORT
+      - MAILER_METHOD
+      - QUEUE_HOST
+      - QUEUE_PORT
+    volumes:
+      - ../:/code
+    depends_on:
+      - corelib-database
+      - corelib-cache
+      - corelib-queue
+    networks:
+      corelib-net:
+
+  corelib-database:
+    container_name: 'corelib-database'
+    image: postgres:10
+    environment:
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=${DB_DBNAME}
+    volumes:
+        - ./database:/docker-entrypoint-initdb.d
+    networks:
+      corelib-net:
+
+  corelib-cache:
+    container_name: 'corelib-cache'
+    image: memcached:alpine
+    networks:
+      corelib-net:
+
+  corelib-queue:
+    container_name: 'corelib-queue'
+    image: schickling/beanstalkd
+    networks:
+      corelib-net:
+
+networks:
+  corelib-net:
