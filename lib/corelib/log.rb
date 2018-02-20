@@ -1,5 +1,5 @@
 # File: log.rb
-# Time-stamp: <2018-02-19 23:46:55>
+# Time-stamp: <2018-02-20 10:28:27>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Log singleton  class
 
@@ -31,7 +31,14 @@ module Corelib
     def self.setup(output = STDOUT, rotate = 'daily', options = {})
       instance._handler = ::Logger.new output, rotate
 
-      instance._handler.formatter = options[:formatter] if options.key? :formatter
+      unless options.key? :formatter
+        options[:formatter] = proc { |severity, time, progname, msg|
+          identity = progname.nil? ? '' : " #{progname} -"
+          "[#{time}]#{identity} #{severity.ljust 5} : #{msg}\n"
+        }
+      end
+
+      instance._handler.formatter = options[:formatter]
       instance._handler.progname = options[:progname] if options.key? :progname
       instance._handler.level = options[:level] if options.key? :level
     end

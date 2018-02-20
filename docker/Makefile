@@ -24,7 +24,7 @@ test:
 	docker-compose run --rm corelib-ruby /bin/bash -c 'cd /code && rake spec'
 
 examples:
-	docker-compose run --rm corelib-ruby /bin/bash -c 'cd /code/examples && ruby cache.rb && ruby database.rb && ruby model.rb && ruby mailer.rb && ruby queue.rb'
+	docker-compose run --rm corelib-ruby /bin/bash -c 'cd /code/examples && ruby cache.rb && ruby database.rb && ruby model.rb && ruby mailer.rb && ruby queue.rb && ruby log.rb'
 
 doc:
 	docker-compose run --rm corelib-ruby /bin/bash -c 'cd /code && rake yard'
