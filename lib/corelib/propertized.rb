@@ -1,11 +1,11 @@
-# File: propertize.rb
-# Time-stamp: <2018-02-13 23:14:11>
+# File: propertized.rb
+# Time-stamp: <2018-02-21 21:47:53>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Propertize module
+# Description: Propertized module
 
 module Corelib
-  # Propertize module
-  module Propertize
+  # Propertized module
+  module Propertized
     # Properties accessor
     # @!visibility private
     attr_accessor :_properties

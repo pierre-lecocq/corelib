@@ -1,11 +1,11 @@
-# File: schematize.rb
-# Time-stamp: <2018-02-12 23:17:21>
+# File: schematized.rb
+# Time-stamp: <2018-02-21 21:48:39>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Schematize module
+# Description: Schematized module
 
 module Corelib
-  # Schematize module
-  module Schematize
+  # Schematized module
+  module Schematized
     # Include InstanceMethods sub-module and include ClassMethods sub-module
     #
     # @param base [Class]

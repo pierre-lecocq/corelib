@@ -1,22 +1,22 @@
-# File: propertize_spec.rb
-# Time-stamp: <2018-02-13 23:18:49>
+# File: propertized_spec.rb
+# Time-stamp: <2018-02-21 21:50:20>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Propertize module spec
+# Description: Propertized module spec
 
 require_relative '../lib/corelib'
 
-describe Corelib::Propertize do
+describe Corelib::Propertized do
   before :all do
-    class TestPropertize
-      include Corelib::Propertize
+    class TestPropertized
+      include Corelib::Propertized
 
       def initialize(props)
         update_properties props
       end
     end
 
-    @object = TestPropertize.new key1: 'value1',
-                                 key2: 'value2'
+    @object = TestPropertized.new key1: 'value1',
+                                  key2: 'value2'
   end
 
   describe '#all_properties' do

@@ -1,26 +1,26 @@
-# File: schematize_spec.rb
-# Time-stamp: <2018-02-12 23:49:39>
+# File: schematized_spec.rb
+# Time-stamp: <2018-02-21 21:51:03>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Schematize module spec
+# Description: Schematized module spec
 
 require_relative '../lib/corelib'
 
-describe Corelib::Schematize do
+describe Corelib::Schematized do
   before :all do
-    class TestSchematize
-      include Corelib::Schematize
+    class TestSchematized
+      include Corelib::Schematized
 
       schema :test,
              test_id:   { primary_key: true },
              test_col:  {}
     end
 
-    @object = TestSchematize.new
+    @object = TestSchematized.new
   end
 
   describe '.table' do
     it 'should return the table name at class level' do
-      expect(TestSchematize.schema_attr(:table)).to be == :test
+      expect(TestSchematized.schema_attr(:table)).to be == :test
     end
   end
 
@@ -32,7 +32,7 @@ describe Corelib::Schematize do
 
   describe '.primary_key' do
     it 'should return the primary key at class level' do
-      expect(TestSchematize.schema_attr(:primary_key)).to be == :test_id
+      expect(TestSchematized.schema_attr(:primary_key)).to be == :test_id
     end
   end
 
@@ -44,7 +44,7 @@ describe Corelib::Schematize do
 
   describe '.columns' do
     it 'should return the columns at class level' do
-      expect(TestSchematize.schema_attr(:columns).keys).to be == %i[test_id test_col]
+      expect(TestSchematized.schema_attr(:columns).keys).to be == %i[test_id test_col]
     end
   end
 

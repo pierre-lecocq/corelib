@@ -1,13 +1,13 @@
 # File: model.rb
-# Time-stamp: <2018-02-19 23:34:44>
+# Time-stamp: <2018-02-21 21:52:40>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Model class
 
 module Corelib
   # Model class
   class Model
-    include Propertize
-    include Schematize
+    include Propertized
+    include Schematized
 
     # Initialize
     #

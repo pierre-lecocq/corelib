@@ -1,13 +1,13 @@
 # File: corelib.rb
-# Time-stamp: <2018-02-19 23:38:31>
+# Time-stamp: <2018-02-21 21:49:38>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Corelib main module
 
 require 'json'
 require 'singleton'
 
-require_relative 'corelib/propertize'
-require_relative 'corelib/schematize'
+require_relative 'corelib/propertized'
+require_relative 'corelib/schematized'
 
 # Corelib main module
 module Corelib
