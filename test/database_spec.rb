@@ -1,7 +1,7 @@
 # File: database_spec.rb
-# Time-stamp: <2018-02-22 22:45:57>
+# Time-stamp: <2018-02-22 23:47:58>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Database singleton class spec
+# Description: Database class spec
 
 require_relative '../lib/corelib'
 

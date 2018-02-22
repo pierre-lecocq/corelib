@@ -1,7 +1,7 @@
 # File: queue_spec.rb
-# Time-stamp: <2018-02-22 22:46:48>
+# Time-stamp: <2018-02-22 23:48:14>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Queue singleton class spec
+# Description: Queue class spec
 
 require_relative '../lib/corelib'
 

@@ -1,7 +1,7 @@
 # File: cache_spec.rb
-# Time-stamp: <2018-02-22 22:46:20>
+# Time-stamp: <2018-02-22 23:47:54>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Cache singleton class spec
+# Description: Cache class spec
 
 require_relative '../lib/corelib'
 
