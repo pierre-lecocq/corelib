@@ -23,8 +23,7 @@ A collection of useful classes for simple and fast web applications.
 To install `Corelib` locally:
 
 1. `git clone https://github.com/pierre-lecocq/corelib`
-2. `cd corelib`
-3. `rake build && rake install`
+2. `cd corelib && rake build && rake install`
 
 A simple test to check if everything is done:
 
@@ -37,13 +36,23 @@ irb(main):002:0> Corelib::VERSION
 irb(main):003:0>
 ```
 
+## Documentation
+
+A rake task is available to generate the documentation thanks to `yard`. Just run:
+
+```sh
+rake yard
+```
+
+A `doc` folder is now generated with the whole documentation inside.
+
 ## Docker commands
 
-In the `docker` folder, a Makefile can be used to execute the following commands:
+For local development, a Makefilein the `docker` folder can be used to execute the following commands:
 
+* `make build` to build the necessary services (database, cache, queue, search)
 * `make test` to run the rspec test suite
 * `make lint` to check the code syntax
-* `make doc` to generate the code documentation
 
 ## Configuration
 
