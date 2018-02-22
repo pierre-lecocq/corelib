@@ -1,45 +1,20 @@
 # File: database.rb
-# Time-stamp: <2018-02-22 12:35:25>
+# Time-stamp: <2018-02-22 13:10:29>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database class
 
 module Corelib
   # Database class
   class Database
-    class << self
-      # Connections pool accessor
-      # @!visibility private
-      attr_accessor :connections
+    include Connectable
 
-      # Connect to a database and store its handler
-      #
-      # @param name [Symbol]
-      # @param config [Hash]
-      #
-      # @return [Corelib::Database]
-      def connect(name, config)
-        @connections ||= {}
-        @connections[name] = Database.new config
-
-        @connections[name]
-      end
-
-      # Get a database connection by its name
-      #
-      # @param name [Symbol]
-      # @param config [Hash]
-      def connection(name = :default)
-        @connections[name] || raise("Undefined database connection '#{name}'")
-      end
-    end
-
-    # Connection accessor
-    attr_accessor :connection
+    # Handler accessor
+    attr_accessor :handler
 
     # Stats accessor
     attr_accessor :stats
 
-    # Initialize the database connection
+    # Initialize the database handler
     #
     # @param config [Hash]
     def initialize(config)
@@ -49,14 +24,14 @@ module Corelib
         unless keys.all?(&config.method(:key?))
 
       @stats = {}
-      @connection = ::PG.connect config
+      @handler = ::PG.connect config
     end
 
-    # Check connection health
+    # Check handler health
     #
     # @return [Boolean]
     def alive?
-      @connection.status == PG::Connection::CONNECTION_OK
+      @handler.status == PG::Connection::CONNECTION_OK
     end
 
     # Execute query with params
@@ -68,7 +43,7 @@ module Corelib
     # @return [PG::Result]
     def exec_params(query, params = [], conn = nil)
       stat_query query
-      conn ||= @connection
+      conn ||= @handler
       conn.exec_params query, params
     end
 
@@ -78,7 +53,7 @@ module Corelib
     #
     # @return [PG::Connection]
     def transaction(&block)
-      @connection.transaction(&block)
+      @handler.transaction(&block)
     end
 
     # Add stat for a query

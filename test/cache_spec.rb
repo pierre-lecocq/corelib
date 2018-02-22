@@ -1,5 +1,5 @@
 # File: cache_spec.rb
-# Time-stamp: <2018-02-22 12:38:37>
+# Time-stamp: <2018-02-22 13:10:52>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache singleton class spec
 
@@ -18,7 +18,7 @@ describe Corelib::Cache do
 
   describe '.setup' do
     it 'return a Memcached instance' do
-      expect(Corelib::Cache.connection.connection).to be_kind_of(Memcached)
+      expect(Corelib::Cache.connection.handler).to be_kind_of(Memcached)
     end
   end
 

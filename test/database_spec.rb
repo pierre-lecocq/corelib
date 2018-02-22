@@ -1,5 +1,5 @@
 # File: database_spec.rb
-# Time-stamp: <2018-02-22 12:23:10>
+# Time-stamp: <2018-02-22 13:11:01>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database singleton class spec
 
@@ -18,7 +18,7 @@ describe Corelib::Database do
 
   describe '.connection' do
     it 'return a PG::Connection instance' do
-      expect(Corelib::Database.connection(:default).connection).to be_kind_of(PG::Connection)
+      expect(Corelib::Database.connection(:default).handler).to be_kind_of(PG::Connection)
     end
   end
 

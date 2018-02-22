@@ -1,45 +1,20 @@
 # File: cache.rb
-# Time-stamp: <2018-02-22 12:39:17>
+# Time-stamp: <2018-02-22 13:10:08>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache class
 
 module Corelib
   # Cache class
   class Cache
-    class << self
-      # Connections pool accessor
-      # @!visibility private
-      attr_accessor :connections
+    include Connectable
 
-      # Connect to a cache and store its handler
-      #
-      # @param name [Symbol]
-      # @param config [Hash]
-      #
-      # @return [Corelib::Cache]
-      def connect(name, config)
-        @connections ||= {}
-        @connections[name] = Cache.new config
-
-        @connections[name]
-      end
-
-      # Get a cache connection by its name
-      #
-      # @param name [Symbol]
-      # @param config [Hash]
-      def connection(name = :default)
-        @connections[name] || raise("Undefined cache connection '#{name}'")
-      end
-    end
-
-    # Connection accessor
-    attr_accessor :connection
+    # Handler accessor
+    attr_accessor :handler
 
     # Stats accessor
     attr_accessor :stats
 
-    # Initialize the database connection
+    # Initialize the database handler
     #
     # @param config [Hash]
     def initialize(config)
@@ -49,14 +24,14 @@ module Corelib
         unless keys.all?(&config.method(:key?))
 
       @stats = { get: 0, set: 0, delete: 0 }
-      @connection = ::Memcached.new "#{config[:host]}:#{config[:port]}"
+      @handler = ::Memcached.new "#{config[:host]}:#{config[:port]}"
     end
 
-    # Check connection health
+    # Check handler health
     #
     # @return [Boolean]
     def alive?
-      @connection.set "health:#{Time.now.to_i}", 1, 1
+      @handler.set "health:#{Time.now.to_i}", 1, 1
       true
     rescue Memcached::ServerIsMarkedDead
       false
@@ -69,7 +44,7 @@ module Corelib
     # @return [String, Numeric]
     def get(key)
       @stats[:get] += 1
-      @connection.get key
+      @handler.get key
     end
 
     # Set the value of a key
@@ -79,7 +54,7 @@ module Corelib
     # @param ttl [Integer]
     def set(key, value, ttl = 0)
       @stats[:set] += 1
-      @connection.set key, value, ttl
+      @handler.set key, value, ttl
     end
 
     # Delete a key
@@ -87,7 +62,7 @@ module Corelib
     # @param key [String]
     def delete(key)
       @stats[:delete] += 1
-      @connection.delete key
+      @handler.delete key
     rescue Memcached::NotFound
       nil
     end

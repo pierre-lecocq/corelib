@@ -1,5 +1,5 @@
 # File: propertized.rb
-# Time-stamp: <2018-02-21 21:47:53>
+# Time-stamp: <2018-02-22 12:46:13>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Propertized module
 

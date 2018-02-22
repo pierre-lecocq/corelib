@@ -1,5 +1,5 @@
 # File: schematized.rb
-# Time-stamp: <2018-02-21 21:48:39>
+# Time-stamp: <2018-02-22 13:05:05>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Schematized module
 
