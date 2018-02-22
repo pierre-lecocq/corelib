@@ -1,5 +1,5 @@
 # File: model.rb
-# Time-stamp: <2018-02-19 23:48:05>
+# Time-stamp: <2018-02-22 12:25:47>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Model example
 
@@ -13,10 +13,11 @@ Corelib.enable :model
 
 # Setup connection
 
-Corelib::Database.setup host: ENV['DB_HOST'],
-                        dbname: ENV['DB_DBNAME'],
-                        user: ENV['DB_USER'],
-                        password: ENV['DB_PASSWORD']
+Corelib::Database.connect :default,
+                          host: ENV['DB_HOST'],
+                          dbname: ENV['DB_DBNAME'],
+                          user: ENV['DB_USER'],
+                          password: ENV['DB_PASSWORD']
 
 # Setup log
 

@@ -1,5 +1,5 @@
 # File: model.rb
-# Time-stamp: <2018-02-21 21:52:40>
+# Time-stamp: <2018-02-22 12:16:22>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Model class
 
@@ -74,7 +74,7 @@ module Corelib
               " (#{columns.join(', ')}) VALUES (#{values.join(', ')})" \
               " RETURNING #{schema_attr(:primary_key)}"
 
-      result = Database.exec_params query, params
+      result = Database.connection.exec_params query, params
       primary_key_value = result.to_a.first[schema_attr(:primary_key).to_s]
 
       valid_properties[schema_attr(:primary_key)] = format_value primary_key_value,
@@ -104,7 +104,7 @@ module Corelib
       query = "UPDATE #{schema_attr(:table)} SET #{columns.join(', ')}" \
               " WHERE #{schema_attr(:primary_key)} = $#{params.length}"
 
-      Database.exec_params query, params
+      Database.connection.exec_params query, params
 
       Log.info "Model #{self.class}##{primary_key_value} updated successfully" \
         if self.class.included_modules.include? Loggable
@@ -119,7 +119,7 @@ module Corelib
       query = "DELETE FROM #{schema_attr(:table)}" \
               " WHERE #{schema_attr(:primary_key)} = $1"
 
-      Database.exec_params query, [primary_key_value]
+      Database.connection.exec_params query, [primary_key_value]
 
       Log.info "Model #{self.class}##{primary_key_value} deleted successfully" \
         if self.class.included_modules.include? Loggable

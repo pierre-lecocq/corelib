@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2018-02-15 12:08:17>
+# Time-stamp: <2018-02-22 12:25:35>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database example
 
@@ -13,21 +13,22 @@ Corelib.enable :database
 
 # Setup connection
 
-Corelib::Database.setup host: ENV['DB_HOST'],
-                        dbname: ENV['DB_DBNAME'],
-                        user: ENV['DB_USER'],
-                        password: ENV['DB_PASSWORD']
+conn = Corelib::Database.connect :default,
+                                 host: ENV['DB_HOST'],
+                                 dbname: ENV['DB_DBNAME'],
+                                 user: ENV['DB_USER'],
+                                 password: ENV['DB_PASSWORD']
 
 # Check health
 
-puts "[Corelib::Database] Is the server alive? #{Corelib::Database.alive?}"
+puts "[Corelib::Database] Is the server alive? #{conn.alive?}"
 
 # Execute a query
 
-result = Corelib::Database.exec_params 'SELECT article_id FROM article WHERE article_id < $1', [2]
+result = conn.exec_params 'SELECT article_id FROM article WHERE article_id < $1', [2]
 puts "[Corelib::Database] Executing a SELECT query that returns: #{result.res_status(result.result_status)}"
 
 # Stats
 
 print "[Corelib::Database] Get stats: "
-p Corelib::Database.stats
+p conn.stats

@@ -1,46 +1,57 @@
 # File: database.rb
-# Time-stamp: <2018-02-13 23:50:34>
+# Time-stamp: <2018-02-22 12:25:07>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database singleton class
 
 module Corelib
-  # Database singleton class
+  # Database class
   class Database
-    include Singleton
+    class << self
+      # Connections pool accessor
+      # @!visibility private
+      attr_accessor :connections
+
+      # Connect to a database and store its handler
+      #
+      # @param name [Symbol]
+      # @param config [Hash]
+      #
+      # @return [Corelib::Database]
+      def connect(name, config)
+        @connections ||= {}
+        @connections[name] = Database.new config
+
+        @connections[name]
+      end
+
+      # Get a database connection by its name
+      #
+      # @param name [Symbol]
+      # @param config [Hash]
+      def connection(name = :default)
+        @connections[name] || raise("Undefined database connection '#{name}'")
+      end
+    end
 
     # Connection accessor
-    # @!visibility private
-    attr_accessor :_connection
+    attr_accessor :connection
 
     # Stats accessor
-    # @!visibility private
-    attr_accessor :_stats
+    attr_accessor :stats
 
-    # Setup the database connection
+    # Initialize the database connection
     #
-    # @param config [Hash] Required keys: :host, :dbname, :user, :password
-    #
-    # @raise [StandardError] if the configuration does not have all required keys
-    def self.setup(config)
-      keys = %i[host dbname user password]
-
-      raise "Invalid database config. It must include #{keys.join ', '}" \
-        unless keys.all?(&config.method(:key?))
-
-      instance._connection = ::PG.connect config
-      instance._stats = {
-        select: 0,
-        insert: 0,
-        update: 0,
-        delete: 0
-      }
+    # @param config [Hash]
+    def initialize(config)
+      @stats = {}
+      @connection = ::PG.connect config
     end
 
     # Check connection health
     #
     # @return [Boolean]
-    def self.alive?
-      instance._connection.status == PG::Connection::CONNECTION_OK
+    def alive?
+      @connection.status == PG::Connection::CONNECTION_OK
     end
 
     # Execute query with params
@@ -50,28 +61,28 @@ module Corelib
     # @param conn [PG::Connection, nil]
     #
     # @return [PG::Result]
-    def self.exec_params(query, params = [], conn = nil)
-      verb = query.split(' ').first.downcase.to_sym
-      instance._stats[verb] += 1 if instance._stats.key? verb
-
-      conn ||= instance._connection
+    def exec_params(query, params = [], conn = nil)
+      stat_query query
+      conn ||= @connection
       conn.exec_params query, params
     end
 
-    # Transaction
+    # Open a transaction and close it after the block execution
     #
     # @param block [Proc]
     #
     # @return [PG::Connection]
-    def self.transaction(&block)
-      instance._connection.transaction(&block)
+    def transaction(&block)
+      @connection.transaction(&block)
     end
 
-    # Get stats
+    # Add stat for a query
     #
-    # @return [Hash]
-    def self.stats
-      instance._stats
+    # @param query [String]
+    def stat_query(query)
+      verb = query.split(' ').first.downcase.to_sym
+      @stats[verb] = 0 unless @stats.key? verb
+      @stats[verb] += 1
     end
   end
 end
