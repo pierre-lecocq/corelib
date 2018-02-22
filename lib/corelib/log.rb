@@ -1,5 +1,5 @@
 # File: log.rb
-# Time-stamp: <2018-02-20 10:28:27>
+# Time-stamp: <2018-02-22 23:52:56>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Log singleton  class
 
@@ -8,7 +8,7 @@ module Corelib
   module Loggable
     # Check setup if included
     #
-    # @param base [Class]
+    # @param _base [Class]
     def self.included(_base)
       raise "#{self.class} includes Corelib::Loggable but Corelib::Log is not set up" \
         unless Log.instance._handler
@@ -26,10 +26,10 @@ module Corelib
     # Setup the log handler
     #
     # @param device [String, IO] A file or an IO device
-    # @param roate [String] Periodicity for rotation
-    # @param config [Hash] Extra options
-    def self.setup(output = STDOUT, rotate = 'daily', options = {})
-      instance._handler = ::Logger.new output, rotate
+    # @param rotate [String] Periodicity for rotation
+    # @param options [Hash] Extra options
+    def self.setup(device = STDOUT, rotate = 'daily', options = {})
+      instance._handler = ::Logger.new device, rotate
 
       unless options.key? :formatter
         options[:formatter] = proc { |severity, time, progname, msg|

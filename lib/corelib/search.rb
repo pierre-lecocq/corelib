@@ -1,5 +1,5 @@
 # File: search.rb
-# Time-stamp: <2018-02-22 22:40:51>
+# Time-stamp: <2018-02-22 23:53:39>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Search class
 
@@ -87,7 +87,6 @@ module Corelib
     # @param index [String]
     # @param type [String]
     # @param id [String]
-    # @param body [Hash]
     #
     # @return [Object]
     def delete(index, type, id)

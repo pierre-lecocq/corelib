@@ -1,5 +1,5 @@
 # File: queue.rb
-# Time-stamp: <2018-02-22 13:26:38>
+# Time-stamp: <2018-02-22 23:54:28>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Queue class
 
@@ -40,7 +40,8 @@ module Corelib
     # Push a job into a named tube
     #
     # @param tube_name [String, Symbol]
-    # @params data [Hash]
+    # @param data [Hash]
+    # @param options [Hash]
     def push(tube_name, data = {}, options = {})
       raise 'Job data must include a :worker entry with a class name' \
         unless data.key? :worker

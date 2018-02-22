@@ -1,5 +1,5 @@
 # File: connectable.rb
-# Time-stamp: <2018-02-22 13:06:18>
+# Time-stamp: <2018-02-22 23:53:57>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Connectable module
 
@@ -35,7 +35,6 @@ module Corelib
       # Get a connection by its name
       #
       # @param name [Symbol]
-      # @param config [Hash]
       def connection(name = :default)
         @_connections[name] || raise("Undefined #{self} connection '#{name}'")
       end
