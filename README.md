@@ -23,7 +23,6 @@ A collection of useful classes for simple and fast web applications.
 In the `docker` folder, a Makefile can be used to execute the following commands:
 
 * `make test` to run the rspec test suite
-* `make examples` to run all examples files
 * `make lint` to check the code syntax
 * `make doc` to generate the code documentation
 

@@ -2,7 +2,6 @@ AllCops:
   Exclude:
     - '**/Rakefile'
     - '**/Gemfile'
-    - 'examples/*'
 
 Metrics/LineLength:
   Max: 100
