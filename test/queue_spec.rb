@@ -1,5 +1,5 @@
 # File: queue_spec.rb
-# Time-stamp: <2018-02-13 21:20:34>
+# Time-stamp: <2018-02-22 13:29:53>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Queue singleton class spec
 
@@ -9,8 +9,9 @@ Corelib.enable :queue
 
 describe Corelib::Queue do
   before :all do
-    Corelib::Queue.setup host: ENV['QUEUE_HOST'],
-                         port: ENV['QUEUE_PORT']
+    Corelib::Queue.connect :default,
+                           host: ENV['QUEUE_HOST'],
+                           port: ENV['QUEUE_PORT']
 
     class TestWorker
       def self.handle(_data = {})
@@ -20,22 +21,22 @@ describe Corelib::Queue do
   end
 
   after :all do
-    Corelib::Queue.close
+    Corelib::Queue.connection.close
   end
 
   describe '.setup' do
     it 'return a Beaneater instance' do
-      expect(Corelib::Queue.instance._connection).to be_kind_of(Beaneater)
+      expect(Corelib::Queue.connection.handler).to be_kind_of(Beaneater)
     end
   end
 
   describe '.push' do
     it 'push a job to a tube' do
-      result = Corelib::Queue.push :test_job,
-                                   worker: 'TestWorker',
-                                   message: 'Hello'
+      result = Corelib::Queue.connection.push :test_job,
+                                              worker: 'TestWorker',
+                                              message: 'Hello'
 
-      job = Corelib::Queue.jobs.find(result[:id])
+      job = Corelib::Queue.connection.jobs.find(result[:id])
 
       expect(result[:status]).to be == 'INSERTED'
       expect(job).to be_kind_of(Beaneater::Job)
@@ -46,11 +47,11 @@ describe Corelib::Queue do
 
   describe '.pop' do
     it 'pop a job from a tube' do
-      result = Corelib::Queue.push :test_job,
-                                   worker: 'TestWorker',
-                                   message: 'Hello'
+      result = Corelib::Queue.connection.push :test_job,
+                                              worker: 'TestWorker',
+                                              message: 'Hello'
 
-      job = Corelib::Queue.pop(:test_job)
+      job = Corelib::Queue.connection.pop(:test_job)
 
       expect(job).to be_kind_of(Beaneater::Job)
       expect(job.id).to be == result[:id]
@@ -61,13 +62,13 @@ describe Corelib::Queue do
 
   describe '.consume' do
     it 'consume a job' do
-      result = Corelib::Queue.push :test_job,
-                                   worker: 'TestWorker',
-                                   message: 'Hello'
+      result = Corelib::Queue.connection.push :test_job,
+                                              worker: 'TestWorker',
+                                              message: 'Hello'
 
-      Corelib::Queue.consume Corelib::Queue.pop(:test_job)
+      Corelib::Queue.connection.consume Corelib::Queue.connection.pop(:test_job)
 
-      expect(Corelib::Queue.jobs.find(result[:id])).to be == nil
+      expect(Corelib::Queue.connection.jobs.find(result[:id])).to be == nil
     end
   end
 end

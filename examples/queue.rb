@@ -1,5 +1,5 @@
 # File: queue.rb
-# Time-stamp: <2018-02-13 21:22:13>
+# Time-stamp: <2018-02-22 13:27:47>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Queue example
 
@@ -13,8 +13,9 @@ Corelib.enable :queue
 
 # Setup connection
 
-Corelib::Queue.setup host: ENV['QUEUE_HOST'],
-                     port: ENV['QUEUE_PORT']
+queue = Corelib::Queue.connect :default,
+                               host: ENV['QUEUE_HOST'],
+                               port: ENV['QUEUE_PORT']
 
 # Test worker
 class TestWorker
@@ -27,15 +28,15 @@ end
 
 tube_name = :test_tube
 
-job = Corelib::Queue.push tube_name,
-                          worker: 'TestWorker',
-                          message: 'Hello'
+job = queue.push tube_name,
+                 worker: 'TestWorker',
+                 message: 'Hello'
 
 puts "[Corelib::Queue] Adding job ##{job[:id]} in the #{tube_name} tube that returned: #{job[:status]}"
 
-job = Corelib::Queue.push tube_name,
-                          worker: 'TestWorker',
-                          message: 'Bonjour'
+job = queue.push tube_name,
+                 worker: 'TestWorker',
+                 message: 'Bonjour'
 
 puts "[Corelib::Queue] Adding job ##{job[:id]} in the #{tube_name} tube that returned: #{job[:status]}"
 
@@ -43,10 +44,10 @@ puts "[Corelib::Queue] Adding job ##{job[:id]} in the #{tube_name} tube that ret
 
 puts "[Corelib::Queue] Consuming all the jobs in the #{tube_name} tube"
 
-while (job = Corelib::Queue.pop(tube_name))
-  Corelib::Queue.consume job
+while (job = queue.pop(tube_name))
+  queue.consume job
 end
 
 # Close connection
 
-Corelib::Queue.close
+queue.close

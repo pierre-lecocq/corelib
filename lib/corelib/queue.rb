@@ -1,48 +1,47 @@
 # File: queue.rb
-# Time-stamp: <2018-02-13 21:19:43>
+# Time-stamp: <2018-02-22 13:26:38>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Queue singleton class
+# Description: Queue class
 
 module Corelib
-  # Queue singleton class
+  # Queue class
   class Queue
-    include Singleton
+    include Connectable
 
-    # Connection accessors
-    # @!visibility private
-    attr_accessor :_connection
+    # Handler accessors
+    attr_accessor :handler
 
-    # Setup the beanstalk connection
+    # Initialize the beanstalk handler
     #
     # @param config [Hash] Required keys: :host, :port
     #
     # @raise [StandardError] if the configuration does not have all required keys
-    def self.setup(config)
+    def initialize(config)
       keys = %i[host port]
 
       raise "Invalid database config. It must include #{keys.join ', '}" \
         unless keys.all?(&config.method(:key?))
 
-      instance._connection = ::Beaneater.new "#{config[:host]}:#{config[:port]}"
+      @handler = ::Beaneater.new "#{config[:host]}:#{config[:port]}"
     end
 
     # Close the current connection
-    def self.close
-      instance._connection.close
+    def close
+      @handler.close
     end
 
     # Get jobs list
     #
     # @return [Jobs]
-    def self.jobs
-      instance._connection.jobs
+    def jobs
+      @handler.jobs
     end
 
     # Push a job into a named tube
     #
     # @param tube_name [String, Symbol]
     # @params data [Hash]
-    def self.push(tube_name, data = {}, options = {})
+    def push(tube_name, data = {}, options = {})
       raise 'Job data must include a :worker entry with a class name' \
         unless data.key? :worker
 
@@ -52,15 +51,15 @@ module Corelib
       raise "Worker class #{data[:worker]} must include a class method named 'handle'" \
         unless klass.respond_to? :handle
 
-      tube = instance._connection.tubes[tube_name.to_s]
+      tube = @handler.tubes[tube_name.to_s]
       tube.put data.to_json, options
     end
 
     # Pop a named tube
     #
     # @param tube_name [Symbol]
-    def self.pop(tube_name)
-      tube = instance._connection.tubes[tube_name.to_s]
+    def pop(tube_name)
+      tube = @handler.tubes[tube_name.to_s]
       return nil unless tube.peek :ready
 
       tube.reserve
@@ -69,7 +68,7 @@ module Corelib
     # Consume a job
     #
     # @param job [Beaneater::Job]
-    def self.consume(job)
+    def consume(job)
       data = JSON.parse(job.body)
       worker = data['worker']
       data = data.tap { |h| h.delete('worker') }
