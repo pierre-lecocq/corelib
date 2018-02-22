@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2018-02-22 13:10:29>
+# Time-stamp: <2018-02-22 13:52:26>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database class
 

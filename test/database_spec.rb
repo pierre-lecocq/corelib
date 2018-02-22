@@ -1,5 +1,5 @@
 # File: database_spec.rb
-# Time-stamp: <2018-02-22 13:11:01>
+# Time-stamp: <2018-02-22 22:45:57>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database singleton class spec
 
@@ -22,7 +22,7 @@ describe Corelib::Database do
     end
   end
 
-  describe '.alive?' do
+  describe '#alive?' do
     it 'check connection health' do
       expect(Corelib::Database.connection(:default).alive?).to be == true
     end

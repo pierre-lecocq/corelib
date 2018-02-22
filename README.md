@@ -8,8 +8,15 @@ A collection of useful classes for simple and fast web applications.
 * `Corelib::Cache` is a simple wrapper for `Memcached`.
 * `Corelib::Mailer` is a simple wrapper for `Mail`.
 * `Corelib::Queue` is a simple wrapper for `Beanstalkd`.
-* `Corelib::Model` is a class that models can extend to provide simple schema and properties features.
+* `Corelib::Search` is a simple wrapper for `Elasticsearch`.
+* `Corelib::Model` is a class that any model can extend to provide simple schema and properties features.
 * `Corelib::Log` is a simple wrapper for `Logger`. Can be activated by including the `Corelib::Loggable` module.
+
+## Modules
+
+* `Corelib::Propertized` provides dynamic properties to an object.
+* `Corelib::Schematized` provides a database schema capabilities to an object.
+* `Corelib::Connectable` provides a pool of connections to an object.
 
 ## Commands
 

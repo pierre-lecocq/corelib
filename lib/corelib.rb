@@ -1,5 +1,5 @@
 # File: corelib.rb
-# Time-stamp: <2018-02-22 13:12:21>
+# Time-stamp: <2018-02-22 13:48:20>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Corelib main module
 
@@ -45,6 +45,8 @@ module Corelib
         require 'mail'
       when :queue
         require 'beaneater'
+      when :search
+        require 'elasticsearch'
       else
         raise "Unknown Corelib module #{m}"
       end

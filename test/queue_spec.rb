@@ -1,5 +1,5 @@
 # File: queue_spec.rb
-# Time-stamp: <2018-02-22 13:29:53>
+# Time-stamp: <2018-02-22 22:46:48>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Queue singleton class spec
 
@@ -24,13 +24,13 @@ describe Corelib::Queue do
     Corelib::Queue.connection.close
   end
 
-  describe '.setup' do
+  describe '.connection' do
     it 'return a Beaneater instance' do
       expect(Corelib::Queue.connection.handler).to be_kind_of(Beaneater)
     end
   end
 
-  describe '.push' do
+  describe '#push' do
     it 'push a job to a tube' do
       result = Corelib::Queue.connection.push :test_job,
                                               worker: 'TestWorker',
@@ -45,7 +45,7 @@ describe Corelib::Queue do
     end
   end
 
-  describe '.pop' do
+  describe '#pop' do
     it 'pop a job from a tube' do
       result = Corelib::Queue.connection.push :test_job,
                                               worker: 'TestWorker',
@@ -60,7 +60,7 @@ describe Corelib::Queue do
     end
   end
 
-  describe '.consume' do
+  describe '#consume' do
     it 'consume a job' do
       result = Corelib::Queue.connection.push :test_job,
                                               worker: 'TestWorker',

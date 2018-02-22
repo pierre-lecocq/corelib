@@ -1,5 +1,5 @@
 # File: cache.rb
-# Time-stamp: <2018-02-22 13:10:08>
+# Time-stamp: <2018-02-22 14:18:16>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache class
 
