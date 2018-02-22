@@ -18,7 +18,26 @@ A collection of useful classes for simple and fast web applications.
 * `Corelib::Schematized` provides a database schema capabilities to an object.
 * `Corelib::Connectable` provides a pool of connections to an object.
 
-## Commands
+## Install
+
+To install `Corelib` locally:
+
+1. `git clone https://github.com/pierre-lecocq/corelib`
+2. `cd corelib`
+3. `rake build && rake install`
+
+A simple test to check if everything is done:
+
+```sh
+$ irb
+irb(main):001:0> require 'corelib'
+=> true
+irb(main):002:0> Corelib::VERSION
+=> "1.0.0"
+irb(main):003:0>
+```
+
+## Docker commands
 
 In the `docker` folder, a Makefile can be used to execute the following commands:
 

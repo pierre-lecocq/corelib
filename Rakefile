@@ -1,5 +1,5 @@
 # File: Rakefile
-# Time-stamp: <2018-02-11 15:33:06>
+# Time-stamp: <2018-02-22 23:10:54>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Rakefile
 
@@ -33,6 +33,22 @@ require 'yard'
 YARD::Rake::YardocTask.new do |t|
   t.files = ['lib/**/*.rb']
   t.stats_options = ['--list-undoc']
+end
+
+#########
+# build #
+#########
+
+task :build do
+  sh 'gem build corelib.gemspec'
+end
+
+###########
+# install #
+###########
+
+task :install do
+  sh 'gem install ./corelib-1.0.0.gem'
 end
 
 ###########
