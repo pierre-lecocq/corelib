@@ -1,5 +1,5 @@
 # File: cache.rb
-# Time-stamp: <2018-02-13 23:36:44>
+# Time-stamp: <2018-02-22 12:37:21>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache example
 
@@ -13,31 +13,32 @@ Corelib.enable :cache
 
 # Setup connection
 
-Corelib::Cache.setup host: ENV['CACHE_HOST'],
-                     port: ENV['CACHE_PORT']
+cache = Corelib::Cache.connect :default,
+                               host: ENV['CACHE_HOST'],
+                               port: ENV['CACHE_PORT']
 
 # Check health
 
-puts "[Corelib::Cache] Is the server alive? #{Corelib::Cache.alive?}"
+puts "[Corelib::Cache] Is the server alive? #{cache.alive?}"
 
 # Set
 
 key = "test:#{Time.now.to_i}"
 puts "[Corelib::Cache] Setting key #{key} with value 'yes'"
 
-Corelib::Cache.set key, 'yes'
+cache.set key, 'yes'
 
 # Get
 
-value = Corelib::Cache.get key
+value = cache.get key
 puts "[Corelib::Cache] Getting key #{key} value: '#{value}'"
 
 # Delete
 
-Corelib::Cache.delete key
+cache.delete key
 
 begin
-  Corelib::Cache.get key
+  cache.get key
 rescue Memcached::NotFound
   puts "[Corelib::Cache] Key #{key} has been deleted successfully"
 end
@@ -45,4 +46,4 @@ end
 # Stats
 
 print "[Corelib::Cache] Get stats: "
-p Corelib::Cache.stats
+p cache.stats

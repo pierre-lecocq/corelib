@@ -1,7 +1,7 @@
 # File: database.rb
-# Time-stamp: <2018-02-22 12:25:07>
+# Time-stamp: <2018-02-22 12:35:25>
 # Copyright (C) 2018 Pierre Lecocq
-# Description: Database singleton class
+# Description: Database class
 
 module Corelib
   # Database class
@@ -43,6 +43,11 @@ module Corelib
     #
     # @param config [Hash]
     def initialize(config)
+      keys = %i[host dbname user password]
+
+      raise "Invalid database config. It must include #{keys.join ', '}" \
+        unless keys.all?(&config.method(:key?))
+
       @stats = {}
       @connection = ::PG.connect config
     end
