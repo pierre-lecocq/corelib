@@ -51,13 +51,13 @@ A `doc` folder is now generated with the whole documentation inside.
 
 For local development, a docker setup is avaialble. Here is the list of the useful commands to run it:
 
-* `make docker:build` to build the services (database, cache, queue, search). It must be run only once.
-* `make docker:start` to start the services (database, cache, queue, search)
-* `make docker:test` to run the rspec test suite within a container
-* `make docker:lint` to check the code syntax within a container
-* `make docker:doc` to generate the documentation from a container
+* `rake docker:build` to build the services (database, cache, queue, search). It must be run only once.
+* `rake docker:start` to start the services (database, cache, queue, search)
+* `rake docker:test` to run the rspec test suite within a container
+* `rake docker:lint` to check the code syntax within a container
+* `rake docker:doc` to generate the documentation from a container
 
-For example, to run the test suite, (after having run `make docker:build` previously) just launch: `make docker:test`
+For example, to run the test suite, (after having run `rake docker:build` previously) just launch: `rake docker:test`
 
 ## Configuration
 
