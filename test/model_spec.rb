@@ -1,5 +1,5 @@
 # File: model_spec.rb
-# Time-stamp: <2018-02-22 12:24:33>
+# Time-stamp: <2018-02-24 23:11:50>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Model spec
 
@@ -10,8 +10,8 @@ Corelib.enable :model
 describe Corelib::Model do
   before :all do
     @conn = Corelib::Database.connection :default
-    @conn.exec_params 'CREATE TABLE IF NOT EXISTS test_tmp' \
-                      ' ( test_tmp_id SERIAL PRIMARY KEY, name TEXT );'
+    @conn.exec 'CREATE TABLE IF NOT EXISTS test_tmp' \
+               ' ( test_tmp_id SERIAL PRIMARY KEY, name TEXT );'
 
     class TestModel < Corelib::Model
       schema :test_tmp,
@@ -21,7 +21,7 @@ describe Corelib::Model do
   end
 
   after :all do
-    @conn.exec_params 'DROP TABLE IF EXISTS test_tmp'
+    @conn.exec 'DROP TABLE IF EXISTS test_tmp'
   end
 
   describe '.validate_properties' do

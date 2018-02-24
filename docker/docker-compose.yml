@@ -7,16 +7,16 @@ services:
     build:
       context: ./ruby
     environment:
-      - DB_HOST
-      - DB_USER
-      - DB_PASSWORD
-      - DB_DBNAME
-      - CACHE_HOST
-      - CACHE_PORT
-      - MAILER_METHOD
-      - QUEUE_HOST
-      - QUEUE_PORT
-      - SEARCH_HOST
+      - DB_HOST=corelib-database
+      - DB_USER=corelib
+      - DB_PASSWORD=corelib
+      - DB_DBNAME=corelib
+      - CACHE_HOST=corelib-cache
+      - CACHE_PORT=11211
+      - MAILER_METHOD=logger
+      - QUEUE_HOST=corelib-queue
+      - QUEUE_PORT=11300
+      - SEARCH_HOST=corelib-search
     volumes:
       - ../:/code
     depends_on:
@@ -31,9 +31,9 @@ services:
     container_name: 'corelib-database'
     image: postgres:10
     environment:
-        - POSTGRES_USER=${DB_USER}
-        - POSTGRES_PASSWORD=${DB_PASSWORD}
-        - POSTGRES_DB=${DB_DBNAME}
+        - POSTGRES_USER=corelib
+        - POSTGRES_PASSWORD=corelib
+        - POSTGRES_DB=corelib
     volumes:
         - ./database:/docker-entrypoint-initdb.d
     networks:

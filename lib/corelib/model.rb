@@ -1,5 +1,5 @@
 # File: model.rb
-# Time-stamp: <2018-02-22 12:16:22>
+# Time-stamp: <2018-02-24 22:47:29>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Model class
 
@@ -119,7 +119,9 @@ module Corelib
       query = "DELETE FROM #{schema_attr(:table)}" \
               " WHERE #{schema_attr(:primary_key)} = $1"
 
-      Database.connection.exec_params query, [primary_key_value]
+      Database.connection.prepare_or_exec_params "delete_#{self.class}",
+                                                 query,
+                                                 [primary_key_value]
 
       Log.info "Model #{self.class}##{primary_key_value} deleted successfully" \
         if self.class.included_modules.include? Loggable

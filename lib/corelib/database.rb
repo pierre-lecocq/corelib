@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2018-02-22 13:52:26>
+# Time-stamp: <2018-02-24 23:10:32>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database class
 
@@ -14,6 +14,9 @@ module Corelib
     # Stats accessor
     attr_accessor :stats
 
+    # Prepared queries accessor
+    attr_accessor :prepared_queries
+
     # Initialize the database handler
     #
     # @param config [Hash]
@@ -24,6 +27,7 @@ module Corelib
         unless keys.all?(&config.method(:key?))
 
       @stats = {}
+      @prepared_queries = {}
       @handler = ::PG.connect config
     end
 
@@ -34,17 +38,74 @@ module Corelib
       @handler.status == PG::Connection::CONNECTION_OK
     end
 
-    # Execute query with params
+    # Execute a query
+    #
+    # @param query [String]
+    # @param conn [PG::Connection, nil]
+    #
+    # @return [PG::Result]
+    def exec(query, conn = nil)
+      stat_query query
+      conn ||= @handler
+      conn.exec query
+    end
+
+    # Execute a query with params
     #
     # @param query [String]
     # @param params [Array]
     # @param conn [PG::Connection, nil]
     #
     # @return [PG::Result]
-    def exec_params(query, params = [], conn = nil)
+    def exec_params(query, params, conn = nil)
       stat_query query
       conn ||= @handler
       conn.exec_params query, params
+    end
+
+    # Prepare a query
+    #
+    # @param name [String]
+    # @param query [String]
+    # @param conn [PG::Connection, nil]
+    #
+    # @return [PG::Result]
+    def prepare(name, query, conn = nil)
+      stat_query query
+      conn ||= @handler
+      conn.prepare name, query
+    end
+
+    # Execute a prepared query with params
+    #
+    # @param name [String]
+    # @param params [Array]
+    # @param conn [PG::Connection, nil]
+    #
+    # @return [PG::Result]
+    def exec_prepared(name, params, conn = nil)
+      stat_query query
+      conn ||= @handler
+      conn.exec_prepared name, params
+    end
+
+    # Prepare and/or execute a prepared query with params
+    #
+    # @param name [String]
+    # @param query [String]
+    # @param params [Array]
+    # @param conn [PG::Connection, nil]
+    #
+    # @return [PG::Result]
+    def prepare_or_exec_params(name, query, params, conn = nil)
+      conn ||= @handler
+
+      unless @prepared_queries.key? name
+        conn.prepare name, query
+        @prepared_queries[name] = query
+      end
+
+      conn.exec_prepared name, params
     end
 
     # Open a transaction and close it after the block execution
