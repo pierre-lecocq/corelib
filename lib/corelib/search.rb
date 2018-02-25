@@ -1,5 +1,5 @@
 # File: search.rb
-# Time-stamp: <2018-02-22 23:53:39>
+# Time-stamp: <2018-02-25 15:29:19>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Search class
 
@@ -8,8 +8,8 @@ module Corelib
   class Search
     include Connectable
 
-    # Handler accessor
-    attr_accessor :handler
+    # Handler reader
+    attr_reader :handler
 
     # Initialize the search handler
     #
@@ -27,7 +27,7 @@ module Corelib
     #
     # @return [Boolean]
     def alive?
-      @handler.ping != false
+      handler.ping != false
     end
 
     # Create a document
@@ -42,7 +42,7 @@ module Corelib
       raise "Invalid index data. It must include #{keys.join ', '}" \
         unless keys.all?(&data.method(:key?))
 
-      @handler.index data
+      handler.index data
     end
 
     # Search in the cluster
@@ -53,7 +53,7 @@ module Corelib
     #
     # @return [Hash]
     def search(index, body)
-      @handler.search index: index, body: body
+      handler.search index: index, body: body
     end
 
     # Get a document
@@ -65,7 +65,7 @@ module Corelib
     #
     # @return [Object]
     def get(index, type, id)
-      @handler.get index: index, type: type, id: id
+      handler.get index: index, type: type, id: id
     end
 
     # Update partially a document
@@ -78,7 +78,7 @@ module Corelib
     #
     # @return [Object]
     def update(index, type, id, body)
-      @handler.update index: index, type: type, id: id, body: { doc: body }
+      handler.update index: index, type: type, id: id, body: { doc: body }
     end
 
     # Delete a document
@@ -90,7 +90,7 @@ module Corelib
     #
     # @return [Object]
     def delete(index, type, id)
-      @handler.delete index: index, type: type, id: id
+      handler.delete index: index, type: type, id: id
     end
   end
 end

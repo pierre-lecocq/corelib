@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2018-02-24 23:10:32>
+# Time-stamp: <2018-02-25 15:27:49>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database class
 
@@ -8,14 +8,14 @@ module Corelib
   class Database
     include Connectable
 
-    # Handler accessor
-    attr_accessor :handler
+    # Handler reader
+    attr_reader :handler
 
-    # Stats accessor
-    attr_accessor :stats
+    # Stats reader
+    attr_reader :stats
 
-    # Prepared queries accessor
-    attr_accessor :prepared_queries
+    # Prepared queries reader
+    attr_reader :prepared_queries
 
     # Initialize the database handler
     #
@@ -35,7 +35,7 @@ module Corelib
     #
     # @return [Boolean]
     def alive?
-      @handler.status == PG::Connection::CONNECTION_OK
+      handler.status == PG::Connection::CONNECTION_OK
     end
 
     # Execute a query
@@ -46,7 +46,7 @@ module Corelib
     # @return [PG::Result]
     def exec(query, conn = nil)
       stat_query query
-      conn ||= @handler
+      conn ||= handler
       conn.exec query
     end
 
@@ -59,7 +59,7 @@ module Corelib
     # @return [PG::Result]
     def exec_params(query, params, conn = nil)
       stat_query query
-      conn ||= @handler
+      conn ||= handler
       conn.exec_params query, params
     end
 
@@ -72,7 +72,7 @@ module Corelib
     # @return [PG::Result]
     def prepare(name, query, conn = nil)
       stat_query query
-      conn ||= @handler
+      conn ||= handler
       conn.prepare name, query
     end
 
@@ -85,7 +85,7 @@ module Corelib
     # @return [PG::Result]
     def exec_prepared(name, params, conn = nil)
       stat_query query
-      conn ||= @handler
+      conn ||= handler
       conn.exec_prepared name, params
     end
 
@@ -98,11 +98,11 @@ module Corelib
     #
     # @return [PG::Result]
     def prepare_or_exec_params(name, query, params, conn = nil)
-      conn ||= @handler
+      conn ||= handler
 
-      unless @prepared_queries.key? name
+      unless prepared_queries.key? name
         conn.prepare name, query
-        @prepared_queries[name] = query
+        prepared_queries[name] = query
       end
 
       conn.exec_prepared name, params
@@ -114,7 +114,7 @@ module Corelib
     #
     # @return [PG::Connection]
     def transaction(&block)
-      @handler.transaction(&block)
+      handler.transaction(&block)
     end
 
     # Add stat for a query
@@ -122,8 +122,8 @@ module Corelib
     # @param query [String]
     def stat_query(query)
       verb = query.split(' ').first.downcase.to_sym
-      @stats[verb] = 0 unless @stats.key? verb
-      @stats[verb] += 1
+      stats[verb] = 0 unless stats.key? verb
+      stats[verb] += 1
     end
   end
 end

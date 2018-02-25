@@ -1,5 +1,5 @@
 # File: queue.rb
-# Time-stamp: <2018-02-22 23:54:28>
+# Time-stamp: <2018-02-25 15:28:29>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Queue class
 
@@ -8,8 +8,8 @@ module Corelib
   class Queue
     include Connectable
 
-    # Handler accessors
-    attr_accessor :handler
+    # Handler reader
+    attr_reader :handler
 
     # Initialize the beanstalk handler
     #
@@ -27,14 +27,14 @@ module Corelib
 
     # Close the current connection
     def close
-      @handler.close
+      handler.close
     end
 
     # Get jobs list
     #
     # @return [Jobs]
     def jobs
-      @handler.jobs
+      handler.jobs
     end
 
     # Push a job into a named tube
@@ -52,7 +52,7 @@ module Corelib
       raise "Worker class #{data[:worker]} must include a class method named 'handle'" \
         unless klass.respond_to? :handle
 
-      tube = @handler.tubes[tube_name.to_s]
+      tube = handler.tubes[tube_name.to_s]
       tube.put data.to_json, options
     end
 
@@ -60,7 +60,7 @@ module Corelib
     #
     # @param tube_name [Symbol]
     def pop(tube_name)
-      tube = @handler.tubes[tube_name.to_s]
+      tube = handler.tubes[tube_name.to_s]
       return nil unless tube.peek :ready
 
       tube.reserve

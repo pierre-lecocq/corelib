@@ -1,5 +1,5 @@
 # File: cache_spec.rb
-# Time-stamp: <2018-02-22 23:47:54>
+# Time-stamp: <2018-02-25 15:24:43>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache class spec
 
@@ -30,19 +30,25 @@ describe Corelib::Cache do
 
   describe '#set' do
     it 'set a key' do
+      expect(Corelib::Cache.connection.stats[:set]).to be == 0
       expect(Corelib::Cache.connection.set(@key, 'yes')).to be == nil
+      expect(Corelib::Cache.connection.stats[:set]).to be == 1
     end
   end
 
   describe '#get' do
     it 'get a key' do
+      expect(Corelib::Cache.connection.stats[:get]).to be == 0
       expect(Corelib::Cache.connection.get(@key)).to be == 'yes'
+      expect(Corelib::Cache.connection.stats[:get]).to be == 1
     end
   end
 
   describe '#delete' do
     it 'delete a key' do
+      expect(Corelib::Cache.connection.stats[:delete]).to be == 0
       expect(Corelib::Cache.connection.delete(@key)).to be == nil
+      expect(Corelib::Cache.connection.stats[:delete]).to be == 1
     end
 
     it 'fail to get the deleted key' do

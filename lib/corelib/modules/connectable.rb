@@ -1,5 +1,5 @@
 # File: connectable.rb
-# Time-stamp: <2018-02-22 23:53:57>
+# Time-stamp: <2018-02-25 15:29:49>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Connectable module
 
@@ -17,7 +17,7 @@ module Corelib
     module ClassMethods
       # Connections pool accessor
       # @!visibility private
-      attr_accessor :_connections
+      attr_accessor :connections
 
       # Create a connection and store it
       #
@@ -26,17 +26,17 @@ module Corelib
       #
       # @return [Object]
       def connect(name, config)
-        @_connections ||= {}
-        @_connections[name] = new config
+        @connections ||= {}
+        @connections[name] = new config
 
-        @_connections[name]
+        @connections[name]
       end
 
       # Get a connection by its name
       #
       # @param name [Symbol]
       def connection(name = :default)
-        @_connections[name] || raise("Undefined #{self} connection '#{name}'")
+        @connections[name] || raise("Undefined #{self} connection '#{name}'")
       end
     end
   end

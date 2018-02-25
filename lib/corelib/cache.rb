@@ -1,5 +1,5 @@
 # File: cache.rb
-# Time-stamp: <2018-02-22 14:18:16>
+# Time-stamp: <2018-02-25 15:27:38>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache class
 
@@ -8,11 +8,11 @@ module Corelib
   class Cache
     include Connectable
 
-    # Handler accessor
-    attr_accessor :handler
+    # Handler reader
+    attr_reader :handler
 
-    # Stats accessor
-    attr_accessor :stats
+    # Stats reader
+    attr_reader :stats
 
     # Initialize the database handler
     #
@@ -31,7 +31,7 @@ module Corelib
     #
     # @return [Boolean]
     def alive?
-      @handler.set "health:#{Time.now.to_i}", 1, 1
+      handler.set "health:#{Time.now.to_i}", 1, 1
       true
     rescue Memcached::ServerIsMarkedDead
       false
@@ -43,8 +43,8 @@ module Corelib
     #
     # @return [String, Numeric]
     def get(key)
-      @stats[:get] += 1
-      @handler.get key
+      stats[:get] += 1
+      handler.get key
     end
 
     # Set the value of a key
@@ -53,16 +53,16 @@ module Corelib
     # @param value [String, Numeric]
     # @param ttl [Integer]
     def set(key, value, ttl = 0)
-      @stats[:set] += 1
-      @handler.set key, value, ttl
+      stats[:set] += 1
+      handler.set key, value, ttl
     end
 
     # Delete a key
     #
     # @param key [String]
     def delete(key)
-      @stats[:delete] += 1
-      @handler.delete key
+      stats[:delete] += 1
+      handler.delete key
     rescue Memcached::NotFound
       nil
     end

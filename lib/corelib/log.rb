@@ -1,5 +1,5 @@
 # File: log.rb
-# Time-stamp: <2018-02-22 23:52:56>
+# Time-stamp: <2018-02-25 15:27:22>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Log singleton  class
 
@@ -21,7 +21,7 @@ module Corelib
 
     # Handler accessor
     # @!visibility private
-    attr_accessor :_handler
+    attr_accessor :handler
 
     # Setup the log handler
     #
@@ -29,7 +29,7 @@ module Corelib
     # @param rotate [String] Periodicity for rotation
     # @param options [Hash] Extra options
     def self.setup(device = STDOUT, rotate = 'daily', options = {})
-      instance._handler = ::Logger.new device, rotate
+      instance.handler = ::Logger.new device, rotate
 
       unless options.key? :formatter
         options[:formatter] = proc { |severity, time, progname, msg|
@@ -38,37 +38,37 @@ module Corelib
         }
       end
 
-      instance._handler.formatter = options[:formatter]
-      instance._handler.progname = options[:progname] if options.key? :progname
-      instance._handler.level = options[:level] if options.key? :level
+      instance.handler.formatter = options[:formatter]
+      instance.handler.progname = options[:progname] if options.key? :progname
+      instance.handler.level = options[:level] if options.key? :level
     end
 
     # Log a debug
     #
     # @param message [String]
     def self.debug(message)
-      instance._handler.debug message
+      instance.handler.debug message
     end
 
     # Log an info
     #
     # @param message [String]
     def self.info(message)
-      instance._handler.info message
+      instance.handler.info message
     end
 
     # Log a warning
     #
     # @param message [String]
     def self.warn(message)
-      instance._handler.warn message
+      instance.handler.warn message
     end
 
     # Log an error
     #
     # @param message [String]
     def self.error(message)
-      instance._handler.error message
+      instance.handler.error message
     end
   end
 end

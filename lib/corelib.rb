@@ -1,5 +1,5 @@
 # File: corelib.rb
-# Time-stamp: <2018-02-22 13:48:20>
+# Time-stamp: <2018-02-25 15:30:55>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Corelib main module
 
@@ -18,7 +18,7 @@ module Corelib
   class << self
     # List of loaded modules
     # @!visibility private
-    attr_accessor :_modules
+    attr_reader :loaded_modules
   end
 
   # Enable modules and load their associated libraries
@@ -27,10 +27,10 @@ module Corelib
   #
   # @raise [StandardError] if a wrong module name is given
   def self.enable(*modules)
-    @_modules ||= []
+    loaded_modules ||= []
 
     modules.each do |m|
-      next if @_modules.include? m
+      next if loaded_modules.include? m
 
       case m
       when :model
@@ -53,7 +53,7 @@ module Corelib
 
       require_relative "corelib/#{m}"
 
-      @_modules << m
+      loaded_modules << m
     end
   end
 end
