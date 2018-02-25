@@ -17,6 +17,7 @@ A collection of useful classes for simple and fast web applications.
 * `Corelib::Propertized` provides dynamic properties to an object
 * `Corelib::Schematized` provides a database schema capabilities to an object
 * `Corelib::Connectable` provides a pool of connections to an object
+* `Corelib::Validable` provides some validation helpers
 
 ## Install
 

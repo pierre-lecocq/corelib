@@ -1,5 +1,5 @@
 # File: cache.rb
-# Time-stamp: <2018-02-25 15:27:38>
+# Time-stamp: <2018-02-25 22:22:19>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Cache class
 
@@ -7,6 +7,7 @@ module Corelib
   # Cache class
   class Cache
     include Connectable
+    include Validable
 
     # Handler reader
     attr_reader :handler
@@ -18,10 +19,7 @@ module Corelib
     #
     # @param config [Hash]
     def initialize(config)
-      keys = %i[host port]
-
-      raise "Invalid cache config. It must include #{keys.join ', '}" \
-        unless keys.all?(&config.method(:key?))
+      self.class.raise_if_missing_keys config, :host, :port
 
       @stats = { get: 0, set: 0, delete: 0 }
       @handler = ::Memcached.new "#{config[:host]}:#{config[:port]}"

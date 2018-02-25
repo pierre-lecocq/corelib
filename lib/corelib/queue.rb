@@ -1,5 +1,5 @@
 # File: queue.rb
-# Time-stamp: <2018-02-25 15:28:29>
+# Time-stamp: <2018-02-25 22:22:01>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Queue class
 
@@ -7,6 +7,7 @@ module Corelib
   # Queue class
   class Queue
     include Connectable
+    include Validable
 
     # Handler reader
     attr_reader :handler
@@ -17,10 +18,7 @@ module Corelib
     #
     # @raise [StandardError] if the configuration does not have all required keys
     def initialize(config)
-      keys = %i[host port]
-
-      raise "Invalid database config. It must include #{keys.join ', '}" \
-        unless keys.all?(&config.method(:key?))
+      self.class.raise_if_missing_keys config, :host, :port
 
       @handler = ::Beaneater.new "#{config[:host]}:#{config[:port]}"
     end

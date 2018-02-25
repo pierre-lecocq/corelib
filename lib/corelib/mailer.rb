@@ -1,37 +1,27 @@
 # File: mailer.rb
-# Time-stamp: <2018-02-13 21:19:35>
+# Time-stamp: <2018-02-25 22:23:39>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Mailer class
 
 module Corelib
   # Mailer class
   class Mailer
+    include Validable
+
     # Setup the mail configureation
     #
     # @param config [Hash] Required keys: :method
     #
     # @raise [StandardError] if the configuration does not have all required keys
     def self.setup(config)
-      raise "Invalid mailer config. It must include ':method'" unless config.key? :method
+      raise_if_missing_keys config, :method
 
       config[:method] = config[:method].to_sym
 
-      case config[:method]
-      when :smtp
-        keys = %i[address port]
-      when :logger, :test
-        keys = nil
-      else
-        raise "Invalid mailer config. Unknown method '#{config[:method]}'"
-      end
-
-      unless keys.nil?
-        raise "Invalid mailer config. It must include #{keys.join ', '}" \
-          unless keys.all?(&config.method(:key?))
-      end
+      raise_if_missing_keys config, :address, :port if config[:method] == :smtp
 
       Mail.defaults do
-        delivery_method(config[:method].to_sym,
+        delivery_method(config[:method],
                         config.tap { |h| h.delete(:method) })
       end
     end

@@ -1,5 +1,5 @@
 # File: search.rb
-# Time-stamp: <2018-02-25 15:29:19>
+# Time-stamp: <2018-02-25 22:24:50>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Search class
 
@@ -7,6 +7,7 @@ module Corelib
   # Search class
   class Search
     include Connectable
+    include Validable
 
     # Handler reader
     attr_reader :handler
@@ -15,10 +16,7 @@ module Corelib
     #
     # @param config [Hash]
     def initialize(config)
-      keys = %i[host]
-
-      raise "Invalid search config. It must include #{keys.join ', '}" \
-        unless keys.all?(&config.method(:key?))
+      self.class.raise_if_missing_keys config, :host
 
       @handler = ::Elasticsearch::Client.new config
     end
@@ -37,10 +35,7 @@ module Corelib
     #
     # @return [Hash]
     def index(data)
-      keys = %i[index type body]
-
-      raise "Invalid index data. It must include #{keys.join ', '}" \
-        unless keys.all?(&data.method(:key?))
+      self.class.raise_if_missing_keys data, :index, :type, :body
 
       handler.index data
     end

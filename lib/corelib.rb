@@ -1,5 +1,5 @@
 # File: corelib.rb
-# Time-stamp: <2018-02-25 15:30:55>
+# Time-stamp: <2018-02-25 21:36:18>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Corelib main module
 
@@ -9,6 +9,7 @@ require 'singleton'
 require_relative 'corelib/modules/connectable'
 require_relative 'corelib/modules/propertized'
 require_relative 'corelib/modules/schematized'
+require_relative 'corelib/modules/validable'
 
 # Corelib main module
 module Corelib

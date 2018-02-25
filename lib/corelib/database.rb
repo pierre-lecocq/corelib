@@ -1,5 +1,5 @@
 # File: database.rb
-# Time-stamp: <2018-02-25 15:27:49>
+# Time-stamp: <2018-02-25 22:22:12>
 # Copyright (C) 2018 Pierre Lecocq
 # Description: Database class
 
@@ -7,6 +7,7 @@ module Corelib
   # Database class
   class Database
     include Connectable
+    include Validable
 
     # Handler reader
     attr_reader :handler
@@ -21,10 +22,7 @@ module Corelib
     #
     # @param config [Hash]
     def initialize(config)
-      keys = %i[host dbname user password]
-
-      raise "Invalid database config. It must include #{keys.join ', '}" \
-        unless keys.all?(&config.method(:key?))
+      self.class.raise_if_missing_keys config, :host, :dbname, :user, :password
 
       @stats = {}
       @prepared_queries = {}
